@@ -1,0 +1,192 @@
+[
+    {
+        "id":  "6983dcbce82a5a0fb908b787",
+        "projectId":  "698b58d6246b1d8bd8104da3",
+        "evaluatorId":  "ID_DEL_MAESTRO",
+        "scores":  {
+                       "innovacion":  5,
+                       "funcionalidad":  4,
+                       "disenoUx":  5,
+                       "impacto":  5
+                   },
+        "finalScore":  19,
+        "resenaTexto":  "Excelente propuesta t+®cnica.",
+        "aiAnalysis":  {
+                           "puntuacionFactibilidad":  85,
+                           "fortalezas":  [
+                                              "Innovaci+¦n",
+                                              "Uso de IA"
+                                          ],
+                           "nivelRiesgo":  "Bajo"
+                       },
+        "createdAt":  null
+    },
+    {
+        "id":  "698d43b96414179906024286",
+        "projectId":  "",
+        "evaluatorId":  "Juez_IA",
+        "scores":  {
+                       "innovacion":  5,
+                       "funcionalidad":  5,
+                       "disenoUx":  0,
+                       "impacto":  5
+                   },
+        "finalScore":  15,
+        "resenaTexto":  "",
+        "aiAnalysis":  {
+                           "puntuacionFactibilidad":  0,
+                           "fortalezas":  [
+
+                                          ],
+                           "nivelRiesgo":  ""
+                       },
+        "createdAt":  null
+    },
+    {
+        "id":  "69993857e01ab4837d4654cb",
+        "projectId":  "698b58d6246b1d8bd8104da3",
+        "evaluatorId":  "Juez_IA",
+        "scores":  {
+                       "innovacion":  5,
+                       "funcionalidad":  5,
+                       "disenoUx":  0,
+                       "impacto":  5
+                   },
+        "finalScore":  15,
+        "resenaTexto":  "",
+        "aiAnalysis":  {
+                           "puntuacionFactibilidad":  0,
+                           "fortalezas":  [
+
+                                          ],
+                           "nivelRiesgo":  ""
+                       },
+        "createdAt":  null
+    },
+    {
+        "id":  "699942fe2c6e0b2b4967c32b",
+        "projectId":  "6998825b207cbd7f2e7e851a",
+        "evaluatorId":  "Juez_IA",
+        "scores":  {
+                       "innovacion":  5,
+                       "funcionalidad":  5,
+                       "disenoUx":  0,
+                       "impacto":  5
+                   },
+        "finalScore":  15,
+        "resenaTexto":  "",
+        "aiAnalysis":  {
+                           "puntuacionFactibilidad":  0,
+                           "fortalezas":  [
+
+                                          ],
+                           "nivelRiesgo":  ""
+                       },
+        "createdAt":  null
+    },
+    {
+        "id":  "699b81c3b05da8da0c3b3414",
+        "projectId":  "698b58d6246b1d8bd8104da3",
+        "evaluatorId":  "Juez_IA",
+        "scores":  {
+                       "innovacion":  5,
+                       "funcionalidad":  5,
+                       "disenoUx":  5,
+                       "impacto":  5
+                   },
+        "finalScore":  20,
+        "resenaTexto":  "Test",
+        "aiAnalysis":  {
+                           "puntuacionFactibilidad":  80,
+                           "fortalezas":  [
+
+                                          ],
+                           "nivelRiesgo":  "Bajo"
+                       },
+        "createdAt":  null
+    },
+    {
+        "id":  "699b81d5b05da8da0c3b3415",
+        "projectId":  "698b58d6246b1d8bd8104da3",
+        "evaluatorId":  "Juez_IA",
+        "scores":  {
+                       "innovacion":  5,
+                       "funcionalidad":  5,
+                       "disenoUx":  5,
+                       "impacto":  5
+                   },
+        "finalScore":  20,
+        "resenaTexto":  "Test",
+        "aiAnalysis":  {
+                           "puntuacionFactibilidad":  0,
+                           "fortalezas":  [
+
+                                          ],
+                           "nivelRiesgo":  ""
+                       },
+        "createdAt":  null
+    },
+    {
+        "id":  "699b82f9b05da8da0c3b3419",
+        "projectId":  "698b58d6246b1d8bd8104da3",
+        "evaluatorId":  "Juez_IA",
+        "scores":  {
+                       "innovacion":  5,
+                       "funcionalidad":  5,
+                       "disenoUx":  5,
+                       "impacto":  5
+                   },
+        "finalScore":  20,
+        "resenaTexto":  "Test limit",
+        "aiAnalysis":  {
+                           "puntuacionFactibilidad":  0,
+                           "fortalezas":  [
+
+                                          ],
+                           "nivelRiesgo":  ""
+                       },
+        "createdAt":  null
+    },
+    {
+        "id":  "699b831ab05da8da0c3b341c",
+        "projectId":  "698b58d6246b1d8bd8104da3",
+        "evaluatorId":  "Juez_IA",
+        "scores":  {
+                       "innovacion":  5,
+                       "funcionalidad":  5,
+                       "disenoUx":  5,
+                       "impacto":  5
+                   },
+        "finalScore":  20,
+        "resenaTexto":  "Test limit",
+        "aiAnalysis":  {
+                           "puntuacionFactibilidad":  0,
+                           "fortalezas":  [
+
+                                          ],
+                           "nivelRiesgo":  ""
+                       },
+        "createdAt":  null
+    },
+    {
+        "id":  "699b83a5b05da8da0c3b341d",
+        "projectId":  "698b58d6246b1d8bd8104da3",
+        "evaluatorId":  "Juez_IA",
+        "scores":  {
+                       "innovacion":  4,
+                       "funcionalidad":  5,
+                       "disenoUx":  4,
+                       "impacto":  3
+                   },
+        "finalScore":  16,
+        "resenaTexto":  "El proyecto Eco-Dron presenta una propuesta con un impacto social y ambiental masivo, ya que automatizar la plantaci+¦n de +írboles en zonas de dif+¡cil acceso es una excelente iniciativa. La idea es bastante innovadora, aunque ya existen conceptos similares en el mercado agr+¡cola. En cuanto a la funcionalidad t+®cnica, el prototipo logr+¦ volar de manera estable y soltar las semillas, pero not+® que el mecanismo de dispensaci+¦n se atasc+¦ un par de veces, lo que requiere mejoras mec+ínicas. Por +¦ltimo, la aplicaci+¦n m+¦vil para controlar el dron y mapear el terreno tiene un dise+¦o muy b+ísico y la interfaz de usuario (UX) resulta confusa para un usuario que no sea experto. Gran potencial, pero necesita pulir la ejecuci+¦n t+®cnica.",
+        "aiAnalysis":  {
+                           "puntuacionFactibilidad":  0,
+                           "fortalezas":  [
+
+                                          ],
+                           "nivelRiesgo":  ""
+                       },
+        "createdAt":  null
+    }
+]
