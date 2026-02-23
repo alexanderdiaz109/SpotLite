@@ -12,7 +12,6 @@ void main() async {
   final bool isDarkMode =
       prefs.getBool('isDarkMode') ?? true; // Por defecto oscuro
   themeNotifier.value = isDarkMode ? ThemeMode.dark : ThemeMode.light;
-
   runApp(const SpotLightApp());
 }
 

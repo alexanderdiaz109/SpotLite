@@ -70,7 +70,6 @@ class _RubricScreenState extends State<RubricScreen> {
       funcionalidad: aiResult["funcionalidad"] ?? 0,
       disenoUx: aiResult["disenoUx"] ?? 0,
       impacto: aiResult["impacto"] ?? 0,
-
       resenaTexto: _reviewController.text,
     );
 
@@ -88,6 +87,41 @@ class _RubricScreenState extends State<RubricScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Error al enviar al servidor.")),
       );
+    }
+    if (mounted) {
+      if (success) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (ctx) => AlertDialog(
+            title: const Text("✨ IA Analizando..."),
+            content: const Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                LinearProgressIndicator(),
+                SizedBox(height: 10),
+                Text("Generando puntajes basados en tu reseña..."),
+              ],
+            ),
+          ),
+        );
+
+        Future.delayed(const Duration(seconds: 2), () {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("✅ Evaluación Guardada")),
+          );
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Error al enviar."),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 

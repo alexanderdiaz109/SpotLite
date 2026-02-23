@@ -62,7 +62,6 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-
     final imageProvider = (widget.project.imageUrl.isNotEmpty)
         ? NetworkImage(widget.project.imageUrl)
         : const NetworkImage("https://picsum.photos/seed/tech/800/400");
@@ -106,13 +105,9 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
           // 2. CONTENIDO DEL PROYECTO
           SliverToBoxAdapter(
             child: Container(
-              decoration: BoxDecoration(
-                color: isDark
-                    ? const Color(0xFF1E2746)
-                    : const Color(0xFFF2F2F2),
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(30),
-                ),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF2F2F2),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(20),
@@ -222,7 +217,6 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                       widget.project.description,
                       style: TextStyle(
                         color: isDark ? Colors.white70 : Colors.black87,
-                        height: 1.5,
                       ),
                     ),
 
@@ -232,7 +226,6 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                       widget.project.metodologia,
                       style: TextStyle(
                         color: isDark ? Colors.white70 : Colors.black87,
-                        height: 1.5,
                       ),
                     ),
 
@@ -288,19 +281,17 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     return Chip(
       label: Text(
         label,
-        style: TextStyle(
-          color: isDark ? Colors.white : const Color(0xFF2D8CFF),
+        style: const TextStyle(
+          color: Color(0xFF2D8CFF),
           fontSize: 12,
           fontWeight: FontWeight.bold,
         ),
       ),
-      backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
+      backgroundColor: isDark ? const Color(0xFF131B38) : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(
-          color: isDark
-              ? const Color(0xFF2D8CFF).withOpacity(0.5)
-              : const Color(0xFFE3F2FD),
+          color: isDark ? Colors.white10 : const Color(0xFFE3F2FD),
         ),
       ),
     );
@@ -329,7 +320,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF0F172A) : Colors.white,
+        color: isDark ? const Color(0xFF131B38) : Colors.white,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
@@ -346,16 +337,17 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
           Text(
             value,
             style: TextStyle(
-              fontWeight: FontWeight.bold,
               fontSize: 18,
-              color: isDark ? Colors.white : Colors.black87,
+              fontWeight: FontWeight.bold,
+              color: isDark ? Colors.white : const Color(0xFF050B30),
             ),
           ),
+          const SizedBox(height: 5),
           Text(
             label,
             style: TextStyle(
-              color: isDark ? Colors.white54 : Colors.grey,
               fontSize: 12,
+              color: isDark ? Colors.white54 : const Color(0xFF666666),
             ),
           ),
         ],
@@ -388,8 +380,6 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
       ),
     );
   }
-
-  // --- MÉTODOS PARA MODAL DE CALIFICACIONES ---
 
   Future<void> _fetchAndShowScores() async {
     showDialog(
