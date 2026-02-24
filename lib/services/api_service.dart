@@ -26,6 +26,20 @@ class ApiService {
     }
   }
 
+  static Future<Project?> getProjectById(String id) async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/Projects/$id'));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return Project.fromJson(data);
+      }
+      return null;
+    } catch (e) {
+      print("Error obteniendo proyecto: $e");
+      return null;
+    }
+  }
+
   // ==========================================
   // 2. EVALUACIONES (Rúbrica)
   // ==========================================

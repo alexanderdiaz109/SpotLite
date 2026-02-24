@@ -18,17 +18,19 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   VideoPlayerController? _videoController;
   ChewieController? _chewieController;
   bool _isVideoInitialized = false;
+  late Project _currentProject;
 
   @override
   void initState() {
     super.initState();
+    _currentProject = widget.project;
     _initializeVideo();
   }
 
   Future<void> _initializeVideo() async {
     try {
       _videoController = VideoPlayerController.networkUrl(
-        Uri.parse(widget.project.videoUrl),
+        Uri.parse(_currentProject.videoUrl),
       );
       await _videoController!.initialize();
       _chewieController = ChewieController(
@@ -62,8 +64,8 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final imageProvider = (widget.project.imageUrl.isNotEmpty)
-        ? NetworkImage(widget.project.imageUrl)
+    final imageProvider = (_currentProject.imageUrl.isNotEmpty)
+        ? NetworkImage(_currentProject.imageUrl)
         : const NetworkImage("https://picsum.photos/seed/tech/800/400");
 
     return Scaffold(
@@ -82,7 +84,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                 : const Color(0xFF2D8CFF),
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                widget.project.title,
+                _currentProject.title,
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -91,7 +93,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                 ),
               ),
               background: Hero(
-                tag: 'project-img-${widget.project.id}', // Conexión con Home
+                tag: 'project-img-${_currentProject.id}', // Conexión con Home
                 child: Image(
                   image: imageProvider,
                   fit: BoxFit.cover,
@@ -151,7 +153,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                             onTap: _fetchAndShowScores,
                             child: _buildStatCard(
                               Icons.analytics,
-                              "${widget.project.stats.factibilidad}%",
+                              "${_currentProject.stats.factibilidad}%",
                               "Factibilidad",
                               isDark,
                             ),
@@ -161,7 +163,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                         Expanded(
                           child: _buildStatCard(
                             Icons.how_to_vote,
-                            "${widget.project.stats.totalEvaluaciones}",
+                            "${_currentProject.stats.totalEvaluaciones}",
                             "Votos",
                             isDark,
                           ),
@@ -182,7 +184,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                     const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
-                      children: widget.project.tecnologias
+                      children: _currentProject.tecnologias
                           .map((tech) => _buildTechChip(tech, isDark))
                           .toList(),
                     ),
@@ -201,8 +203,8 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        children: widget.project.members.isNotEmpty
-                            ? widget.project.members
+                        children: _currentProject.members.isNotEmpty
+                            ? _currentProject.members
                                   .map((m) => _buildMemberAvatar(m))
                                   .toList()
                             : [
@@ -218,7 +220,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                     // DESCRIPCIÓN Y METODOLOGÍA
                     _buildSectionTitle("Proyecto Abstracto", isDark),
                     Text(
-                      widget.project.description,
+                      _currentProject.description,
                       style: TextStyle(
                         color: isDark ? Colors.white70 : Colors.black87,
                       ),
@@ -227,7 +229,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                     const SizedBox(height: 15),
                     _buildSectionTitle("Metodología", isDark),
                     Text(
-                      widget.project.metodologia,
+                      _currentProject.metodologia,
                       style: TextStyle(
                         color: isDark ? Colors.white70 : Colors.black87,
                       ),
@@ -239,14 +241,18 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.push(
+                        onPressed: () async {
+                          final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (_) =>
-                                  RubricScreen(project: widget.project),
+                                  RubricScreen(project: _currentProject),
                             ),
                           );
+
+                          if (result == true) {
+                            _refreshProject();
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF2D8CFF),
@@ -395,7 +401,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     );
 
     final List<Evaluation> evals = await ApiService.getEvaluationsByProject(
-      widget.project.id,
+      _currentProject.id,
     );
 
     if (!mounted) return;
@@ -567,5 +573,14 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _refreshProject() async {
+    final updatedProject = await ApiService.getProjectById(_currentProject.id);
+    if (updatedProject != null && mounted) {
+      setState(() {
+        _currentProject = updatedProject;
+      });
+    }
   }
 }

@@ -71,53 +71,28 @@ class _RubricScreenState extends State<RubricScreen> {
       disenoUx: aiResult["disenoUx"] ?? 0,
       impacto: aiResult["impacto"] ?? 0,
       resenaTexto: _reviewController.text,
+      aiAnalysis: aiResult["aiAnalysis"],
     );
 
     bool success = await ApiService.sendEvaluation(evaluation);
-    setState(() => _isSending = false);
 
-    if (mounted) Navigator.pop(context);
-
-    if (success) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Evaluación Guardada y analizada")),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Error al enviar al servidor.")),
-      );
-    }
     if (mounted) {
-      if (success) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (ctx) => AlertDialog(
-            title: const Text("✨ IA Analizando..."),
-            content: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                LinearProgressIndicator(),
-                SizedBox(height: 10),
-                Text("Generando puntajes basados en tu reseña..."),
-              ],
-            ),
-          ),
-        );
+      setState(() => _isSending = false);
 
-        Future.delayed(const Duration(seconds: 2), () {
-          Navigator.pop(context);
-          Navigator.pop(context);
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("✅ Evaluación Guardada")),
-          );
-        });
+      if (success) {
+        if (mounted)
+          Navigator.pop(
+            context,
+            true,
+          ); // Regresamos al DetailScreen con un flag de recarga opcional
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("✅ Evaluación Guardada y analizada")),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("Error al enviar."),
+            content: Text("Error al enviar al servidor."),
             backgroundColor: Colors.red,
           ),
         );

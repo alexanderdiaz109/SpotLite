@@ -6,6 +6,7 @@ class Evaluation {
   final int disenoUx;
   final int impacto;
   final String resenaTexto;
+  final Map<String, dynamic>? aiAnalysis;
 
   Evaluation({
     required this.projectId,
@@ -15,6 +16,7 @@ class Evaluation {
     required this.disenoUx,
     required this.impacto,
     required this.resenaTexto,
+    this.aiAnalysis,
   });
 
   Map<String, dynamic> toJson() {
@@ -28,6 +30,7 @@ class Evaluation {
         "impacto": impacto,
       },
       "resenaTexto": resenaTexto,
+      if (aiAnalysis != null) "aiAnalysis": aiAnalysis,
     };
   }
 
@@ -40,6 +43,7 @@ class Evaluation {
       disenoUx: json['scores']?['disenoUx'] ?? 0,
       impacto: json['scores']?['impacto'] ?? 0,
       resenaTexto: json['resenaTexto'] ?? '',
+      aiAnalysis: json['aiAnalysis'],
     );
   }
 }

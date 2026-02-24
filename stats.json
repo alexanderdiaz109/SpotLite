@@ -1,0 +1,26 @@
+﻿[
+    {
+        "title":  "Eco-Dron",
+        "id":  "698b58d6246b1d8bd8104da3",
+        "stats":  {
+                      "puntuacionFactibilidad":  41.2,
+                      "totalEvaluaciones":  4
+                  }
+    },
+    {
+        "title":  "NeuroLife Assist",
+        "id":  "699881d8207cbd7f2e7e8513",
+        "stats":  {
+                      "puntuacionFactibilidad":  0,
+                      "totalEvaluaciones":  0
+                  }
+    },
+    {
+        "title":  "AgroSmart IoT",
+        "id":  "6998825b207cbd7f2e7e851a",
+        "stats":  {
+                      "puntuacionFactibilidad":  0,
+                      "totalEvaluaciones":  1
+                  }
+    }
+]

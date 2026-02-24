@@ -487,7 +487,7 @@ class _HomeScreenState extends State<HomeScreen> {
         MaterialPageRoute(
           builder: (_) => ProjectDetailScreen(project: project),
         ),
-      ),
+      ).then((_) => _refreshProjects()),
       child: Container(
         margin: const EdgeInsets.only(bottom: 25),
         decoration: BoxDecoration(

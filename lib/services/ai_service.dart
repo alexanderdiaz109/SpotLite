@@ -19,15 +19,26 @@ class AiService {
       );
 
       final prompt = '''
-      Actúa como un juez asistente. Evalúa el proyecto "\$projectName" basándote ÚNICAMENTE en esta reseña del evaluador: "\$reviewText".
+      Actúa como un juez experto en innovación tecnológica. Evalúa el proyecto "\$projectName" basándote ÚNICAMENTE en la siguiente reseña: "\$reviewText".
         
-        Devuelve un JSON EXACTAMENTE con esta estructura (calificaciones del 1 al 5):
-        {
-          "innovacion": 4,
-          "funcionalidad": 5,
-          "disenoUx": 4,
-          "impacto": 3
+      Devuelve un JSON EXACTAMENTE con esta estructura:
+      {
+        "innovacion": 4,
+        "funcionalidad": 5,
+        "disenoUx": 4,
+        "impacto": 3,
+        "aiAnalysis": {
+          "puntuacionFactibilidad": 85,
+          "fortalezas": ["Buena idea", "Tecnología moderna"],
+          "nivelRiesgo": "Bajo"
         }
+      }
+      
+      Reglas:
+      - Las calificaciones (innovacion, funcionalidad, disenoUx, impacto) deben ser números enteros del 0 al 5.
+      - "puntuacionFactibilidad" debe ser un número del 0 al 100 evaluando la viabilidad técnica/comercial.
+      - "fortalezas" debe ser un arreglo de máximo 3 strings cortos.
+      - "nivelRiesgo" debe ser estrictamente "Alto", "Medio" o "Bajo".
       ''';
 
       final content = [Content.text(prompt)];
