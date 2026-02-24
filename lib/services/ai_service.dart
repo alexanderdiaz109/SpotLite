@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import '../api_keys.dart';
 
 class AiService {
-  static const String apiKey = 'AIzaSyCFfIN7zkH3JRMtd5wYK1P4nLQfoqNVd6o';
+  static const String apiKey = ApiKeys.geminiApiKey;
 
   static Future<Map<String, dynamic>?> analyzeReview(
     String projectName,

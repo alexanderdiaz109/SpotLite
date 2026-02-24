@@ -105,9 +105,13 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
           // 2. CONTENIDO DEL PROYECTO
           SliverToBoxAdapter(
             child: Container(
-              decoration: const BoxDecoration(
-                color: Color(0xFFF2F2F2),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? const Color(0xFF020617)
+                    : const Color(0xFFF2F2F2),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(30),
+                ),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(20),

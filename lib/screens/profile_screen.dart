@@ -57,14 +57,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF0A155A), Color(0xFF020617)],
-          ),
+        decoration: BoxDecoration(
+          gradient: isDark
+              ? const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFF0A155A), Color(0xFF020617)],
+                )
+              : const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFFE2E8F0), Color(0xFFF8FAFC)],
+                ),
         ),
         child: SafeArea(
           child: Column(
@@ -77,15 +85,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.white),
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: isDark ? Colors.white : Colors.black87,
+                      ),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Text(
                         "Mi Perfil",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: isDark ? Colors.white : Colors.black87,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -140,18 +151,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             const SizedBox(height: 25),
                             Text(
                               name,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 26,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: isDark ? Colors.white : Colors.black87,
                               ),
                             ),
                             const SizedBox(height: 8),
                             Text(
                               email,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.white70,
+                                color: isDark ? Colors.white70 : Colors.black54,
                               ),
                             ),
                             const SizedBox(height: 20),
@@ -190,9 +201,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     "Evaluaciones",
                                     "12",
                                     Icons.assignment_turned_in,
+                                    isDark,
                                   ),
                                   const SizedBox(width: 15),
-                                  _buildStatCard("Promedio", "9.5", Icons.star),
+                                  _buildStatCard(
+                                    "Promedio",
+                                    "9.5",
+                                    Icons.star,
+                                    isDark,
+                                  ),
                                 ],
                               ),
                             ),
@@ -202,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 30,
                               ),
-                              child: _buildPreferencesCard(),
+                              child: _buildPreferencesCard(isDark),
                             ),
                             const SizedBox(height: 30),
                             Padding(
@@ -251,14 +268,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildStatCard(String label, String value, IconData icon) {
+  Widget _buildStatCard(
+    String label,
+    String value,
+    IconData icon,
+    bool isDark,
+  ) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: isDark
+              ? Colors.white.withOpacity(0.05)
+              : Colors.black.withOpacity(0.05),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white10),
+          border: Border.all(color: isDark ? Colors.white10 : Colors.black12),
         ),
         child: Column(
           children: [
@@ -266,15 +290,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 10),
             Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: isDark ? Colors.white : Colors.black87,
               ),
             ),
             Text(
               label,
-              style: const TextStyle(fontSize: 12, color: Colors.white60),
+              style: TextStyle(
+                fontSize: 12,
+                color: isDark ? Colors.white60 : Colors.black54,
+              ),
             ),
           ],
         ),
@@ -282,23 +309,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildPreferencesCard() {
+  Widget _buildPreferencesCard(bool isDark) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: isDark
+            ? Colors.white.withOpacity(0.05)
+            : Colors.black.withOpacity(0.05),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: isDark ? Colors.white10 : Colors.black12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 10),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
             child: Text(
               "Preferencias",
               style: TextStyle(
-                color: Colors.white,
+                color: isDark ? Colors.white : Colors.black87,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -307,9 +336,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             activeColor: const Color(0xFF2D8CFF),
-            title: const Text(
+            title: Text(
               "Modo Oscuro",
-              style: TextStyle(color: Colors.white70, fontSize: 16),
+              style: TextStyle(
+                color: isDark ? Colors.white70 : Colors.black87,
+                fontSize: 16,
+              ),
             ),
             value: _isDarkMode,
             onChanged: (bool value) async {

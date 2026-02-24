@@ -76,22 +76,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF020617),
+      backgroundColor: isDark
+          ? const Color(0xFF020617)
+          : const Color(0xFFF8FAFC),
       // 3. USAMOS INDEXEDSTACK PARA CAMBIAR DE PANTALLA
       body: IndexedStack(
         index: _currentIndex,
         children: [
           const RankingScreen(), // Pantalla 0: Ranking
-          _buildHomeContent(), // Pantalla 1: El Home con diseño espacial
+          _buildHomeContent(isDark), // Pantalla 1: El Home con diseño espacial
         ],
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           border: Border(
-            top: BorderSide(color: Colors.white.withOpacity(0.05), width: 1),
+            top: BorderSide(
+              color: isDark
+                  ? Colors.white.withOpacity(0.05)
+                  : Colors.black.withOpacity(0.05),
+              width: 1,
+            ),
           ),
-          color: const Color(0xFF020617).withOpacity(0.9),
+          color: isDark
+              ? const Color(0xFF020617).withOpacity(0.9)
+              : Colors.white.withOpacity(0.95),
         ),
         child: BottomNavigationBar(
           backgroundColor: Colors.transparent,
@@ -126,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // WIDGET CON EL DISEÑO DEL HOME (Extraído para limpieza)
-  Widget _buildHomeContent() {
+  Widget _buildHomeContent(bool isDark) {
     return Stack(
       children: [
         // Fondos Atmosféricos
@@ -194,12 +205,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(width: 12),
-                          const Text(
+                          Text(
                             "SpotLight",
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: isDark
+                                  ? Colors.white
+                                  : const Color(0xFF050B30),
                               letterSpacing: 1,
                             ),
                           ),
@@ -210,11 +223,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: TextField(
                           controller: _searchController,
                           autofocus: true,
-                          style: const TextStyle(color: Colors.white),
+                          style: TextStyle(
+                            color: isDark ? Colors.white : Colors.black87,
+                          ),
                           decoration: InputDecoration(
                             hintText: "Buscar proyecto...",
                             hintStyle: TextStyle(
-                              color: Colors.white.withOpacity(0.5),
+                              color: isDark
+                                  ? Colors.white.withOpacity(0.5)
+                                  : Colors.black.withOpacity(0.5),
                             ),
                             border: InputBorder.none,
                             prefixIcon: const Icon(
@@ -230,7 +247,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         IconButton(
                           icon: Icon(
                             _isSearching ? Icons.close : Icons.search,
-                            color: Colors.white,
+                            color: isDark
+                                ? Colors.white
+                                : const Color(0xFF050B30),
                           ),
                           onPressed: () {
                             setState(() {
@@ -279,14 +298,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              const Padding(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 15),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
                 child: Text(
                   "Explora Proyectos",
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: isDark ? Colors.white : const Color(0xFF050B30),
                   ),
                 ),
               ),
@@ -299,10 +318,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Row(
                   children: [
-                    _buildFilterChip("Todos"),
-                    _buildFilterChip("Móvil"),
-                    _buildFilterChip("Web"),
-                    _buildFilterChip("Web y Móvil"),
+                    _buildFilterChip("Todos", isDark),
+                    _buildFilterChip("Móvil", isDark),
+                    _buildFilterChip("Web", isDark),
+                    _buildFilterChip("Web y Móvil", isDark),
                   ],
                 ),
               ),
@@ -325,12 +344,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       return RefreshIndicator(
                         onRefresh: _refreshProjects,
                         child: ListView(
-                          children: const [
-                            SizedBox(height: 100),
+                          children: [
+                            const SizedBox(height: 100),
                             Center(
                               child: Text(
                                 "No hay proyectos disponibles.",
-                                style: TextStyle(color: Colors.white70),
+                                style: TextStyle(
+                                  color: isDark
+                                      ? Colors.white70
+                                      : Colors.black54,
+                                ),
                               ),
                             ),
                           ],
@@ -377,10 +400,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     }).toList();
 
                     if (searchResults.isEmpty) {
-                      return const Center(
+                      return Center(
                         child: Text(
                           "No hay coincidencias",
-                          style: TextStyle(color: Colors.white54),
+                          style: TextStyle(
+                            color: isDark ? Colors.white54 : Colors.black54,
+                          ),
                         ),
                       );
                     }
@@ -388,7 +413,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     return RefreshIndicator(
                       onRefresh: _refreshProjects,
                       color: const Color(0xFF2D8CFF),
-                      backgroundColor: const Color(0xFF131B38),
+                      backgroundColor: isDark
+                          ? const Color(0xFF131B38)
+                          : Colors.white,
                       child: ListView.builder(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -396,7 +423,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         itemCount: searchResults.length,
                         itemBuilder: (context, index) {
-                          return _buildProjectCard(searchResults[index]);
+                          return _buildProjectCard(
+                            searchResults[index],
+                            isDark,
+                          );
                         },
                       ),
                     );
@@ -410,7 +440,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildFilterChip(String label) {
+  Widget _buildFilterChip(String label, bool isDark) {
     bool isSelected = _selectedFilter == label;
     return GestureDetector(
       onTap: () => setState(() => _selectedFilter = label),
@@ -420,18 +450,24 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           color: isSelected
               ? const Color(0xFF2D8CFF)
-              : Colors.white.withOpacity(0.05),
+              : (isDark
+                    ? Colors.white.withOpacity(0.05)
+                    : Colors.black.withOpacity(0.05)),
           borderRadius: BorderRadius.circular(25),
           border: Border.all(
             color: isSelected
                 ? const Color(0xFF2D8CFF)
-                : Colors.white.withOpacity(0.1),
+                : (isDark
+                      ? Colors.white.withOpacity(0.1)
+                      : Colors.black.withOpacity(0.1)),
           ),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? Colors.white : Colors.white70,
+            color: isSelected
+                ? Colors.white
+                : (isDark ? Colors.white70 : Colors.black87),
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             fontSize: 13,
           ),
@@ -440,7 +476,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildProjectCard(Project project) {
+  Widget _buildProjectCard(Project project, bool isDark) {
     final imageProvider = (project.imageUrl.isNotEmpty)
         ? NetworkImage(project.imageUrl)
         : const NetworkImage("https://picsum.photos/seed/tech/800/400");
@@ -455,12 +491,18 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 25),
         decoration: BoxDecoration(
-          color: const Color(0xFF131B38),
+          color: isDark ? const Color(0xFF131B38) : Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white.withOpacity(0.05)),
+          border: Border.all(
+            color: isDark
+                ? Colors.white.withOpacity(0.05)
+                : Colors.black.withOpacity(0.05),
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: isDark
+                  ? Colors.black.withOpacity(0.3)
+                  : Colors.black.withOpacity(0.1),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),
@@ -552,10 +594,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       Expanded(
                         child: Text(
                           project.title,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: isDark ? Colors.white : Colors.black87,
                             height: 1.2,
                           ),
                         ),
@@ -590,9 +632,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.05),
+                              color: isDark
+                                  ? Colors.white.withOpacity(0.05)
+                                  : const Color(0xFF2D8CFF).withOpacity(0.05),
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.white10),
+                              border: Border.all(
+                                color: isDark
+                                    ? Colors.white10
+                                    : const Color(0xFF2D8CFF).withOpacity(0.2),
+                              ),
                             ),
                             child: Text(
                               t,
@@ -612,7 +660,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.7),
+                      color: isDark
+                          ? Colors.white.withOpacity(0.7)
+                          : Colors.black54,
                       fontSize: 13,
                       height: 1.5,
                     ),
@@ -625,21 +675,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.9),
+                        color: isDark
+                            ? Colors.white.withOpacity(0.9)
+                            : const Color(0xFF2D8CFF),
                         width: 1,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.white.withOpacity(0.15),
+                          color: isDark
+                              ? Colors.white.withOpacity(0.15)
+                              : const Color(0xFF2D8CFF).withOpacity(0.1),
                           blurRadius: 10,
                           spreadRadius: 1,
                         ),
                       ],
                     ),
-                    child: const Text(
+                    child: Text(
                       "Visualizar Proyecto",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: isDark ? Colors.white : const Color(0xFF2D8CFF),
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                         letterSpacing: 0.5,

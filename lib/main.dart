@@ -10,7 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final bool isDarkMode =
-      prefs.getBool('isDarkMode') ?? true; // Por defecto oscuro
+      prefs.getBool('isDarkMode') ?? true;
   themeNotifier.value = isDarkMode ? ThemeMode.dark : ThemeMode.light;
   runApp(const SpotLightApp());
 }
