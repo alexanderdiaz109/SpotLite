@@ -14,7 +14,7 @@ class ApiService {
   // ==========================================
   static Future<List<Project>> getProjects() async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/Projects'));
+       final response = await http.get(Uri.parse('$baseUrl/Projects/active'));
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         return data.map((json) => Project.fromJson(json)).toList();
