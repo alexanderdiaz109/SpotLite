@@ -226,14 +226,6 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 15),
-                    _buildSectionTitle("Metodología", isDark),
-                    Text(
-                      _currentProject.metodologia,
-                      style: TextStyle(
-                        color: isDark ? Colors.white70 : Colors.black87,
-                      ),
-                    ),
 
                     const SizedBox(height: 40),
 
