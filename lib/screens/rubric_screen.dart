@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/project.dart';
-import '../models/evaluation.dart';
-import '../services/api_service.dart';
-import '../services/ai_service.dart';
+import 'ai_analysis_screen.dart';
 
 class RubricScreen extends StatefulWidget {
   final Project project;
@@ -14,10 +12,9 @@ class RubricScreen extends StatefulWidget {
 
 class _RubricScreenState extends State<RubricScreen> {
   final TextEditingController _reviewController = TextEditingController();
-  bool _isSending = false;
 
-  void _submitReview() async {
-    if (_reviewController.text.isEmpty) {
+  void _submitReview() {
+    if (_reviewController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Escribe una reseña para que la IA analice."),
@@ -26,78 +23,16 @@ class _RubricScreenState extends State<RubricScreen> {
       return;
     }
 
-    setState(() => _isSending = true);
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        title: const Text("✨ IA Analizando..."),
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            LinearProgressIndicator(),
-            SizedBox(height: 10),
-            Text("Extrayendo puntajes de tu reseña..."),
-          ],
+    // Navegar directamente a la nueva pantalla de Análisis
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AiAnalysisScreen(
+          project: widget.project,
+          reviewText: _reviewController.text.trim(),
         ),
       ),
     );
-
-    final aiResult = await AiService.analyzeReview(
-      widget.project.title,
-      _reviewController.text,
-    );
-
-    if (mounted) Navigator.pop(context);
-
-    if (aiResult == null) {
-      setState(() => _isSending = false);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Error al analizar con la IA."),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    final evaluation = Evaluation(
-      projectId: widget.project.id,
-      evaluatorId: "Juez_IA",
-      innovacion: aiResult["innovacion"] ?? 0,
-      funcionalidad: aiResult["funcionalidad"] ?? 0,
-      disenoUx: aiResult["disenoUx"] ?? 0,
-      impacto: aiResult["impacto"] ?? 0,
-      resenaTexto: _reviewController.text,
-      aiAnalysis: aiResult["aiAnalysis"],
-    );
-
-    bool success = await ApiService.sendEvaluation(evaluation);
-
-    if (mounted) {
-      setState(() => _isSending = false);
-
-      if (success) {
-        if (mounted)
-          Navigator.pop(
-            context,
-            true,
-          ); // Regresamos al DetailScreen con un flag de recarga opcional
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("✅ Evaluación Guardada y analizada")),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Error al enviar al servidor."),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
   }
 
   @override
@@ -224,7 +159,7 @@ class _RubricScreenState extends State<RubricScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: _isSending ? null : _submitReview,
+                        onPressed: _submitReview,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF2D8CFF),
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -232,22 +167,13 @@ class _RubricScreenState extends State<RubricScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        icon: _isSending
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : const Icon(
-                                Icons.auto_awesome,
-                                color: Colors.white,
-                              ),
-                        label: Text(
-                          _isSending ? "Procesando..." : "Guardar y analizarlo",
-                          style: const TextStyle(
+                        icon: const Icon(
+                          Icons.auto_awesome,
+                          color: Colors.white,
+                        ),
+                        label: const Text(
+                          "Guardar y analizarlo",
+                          style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
