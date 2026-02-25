@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import '../models/project.dart';
 import '../models/evaluation.dart';
 import '../services/api_service.dart';
@@ -17,7 +19,9 @@ class ProjectDetailScreen extends StatefulWidget {
 class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   VideoPlayerController? _videoController;
   ChewieController? _chewieController;
+  
   bool _isVideoInitialized = false;
+  bool _isExternalLink = false;
   late Project _currentProject;
 
   @override
@@ -28,29 +32,112 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   }
 
   Future<void> _initializeVideo() async {
-    try {
-      _videoController = VideoPlayerController.networkUrl(
-        Uri.parse(_currentProject.videoUrl),
-      );
-      await _videoController!.initialize();
-      _chewieController = ChewieController(
-        videoPlayerController: _videoController!,
-        autoPlay: false,
-        looping: false,
-        aspectRatio: 16 / 9,
-        placeholder: Container(color: Colors.black),
-        errorBuilder: (context, errorMessage) {
-          return const Center(
-            child: Text(
-              "Error al cargar video",
-              style: TextStyle(color: Colors.white),
-            ),
-          );
-        },
-      );
-      setState(() => _isVideoInitialized = true);
-    } catch (e) {
-      print("Error video: $e");
+    final videoUrl = _currentProject.videoUrl.trim();
+    if (videoUrl.isEmpty) return;
+
+    if (videoUrl.contains('youtube.com') || videoUrl.contains('youtu.be')) {
+      try {
+        final yt = YoutubeExplode();
+        final manifest = await yt.videos.streamsClient.getManifest(videoUrl);
+        final streamInfo = manifest.muxed.withHighestBitrate();
+        
+        _videoController = VideoPlayerController.networkUrl(streamInfo.url);
+        await _videoController!.initialize();
+        _chewieController = ChewieController(
+          videoPlayerController: _videoController!,
+          autoPlay: false,
+          looping: false,
+          aspectRatio: _videoController!.value.aspectRatio,
+          placeholder: Container(color: Colors.black),
+          errorBuilder: (context, errorMessage) {
+            return const Center(child: Text("Error al cargar video nativo de YT", style: TextStyle(color: Colors.white)));
+          },
+        );
+        setState(() => _isVideoInitialized = true);
+        yt.close();
+      } catch (e, stackTrace) {
+        print("======== ERROR YOUTUBE ========");
+        print(videoUrl);
+        print(e.toString());
+        print(stackTrace);
+        print("===============================");
+        setState(() {
+          _isExternalLink = true;
+          _isVideoInitialized = true;
+        });
+      }
+    } else if (videoUrl.endsWith('.mp4') || videoUrl.endsWith('.m3u8')) {
+      // Es un video nativo
+      try {
+        _videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+        await _videoController!.initialize();
+        _chewieController = ChewieController(
+          videoPlayerController: _videoController!,
+          autoPlay: false,
+          looping: false,
+          aspectRatio: _videoController!.value.aspectRatio,
+          placeholder: Container(color: Colors.black),
+          errorBuilder: (context, errorMessage) {
+            return const Center(
+              child: Text("Error al cargar video", style: TextStyle(color: Colors.white)),
+            );
+          },
+        );
+        setState(() => _isVideoInitialized = true);
+      } catch (e) {
+        print("Error video nativo: $e");
+        setState(() => _isExternalLink = true);
+      }
+    } else if (videoUrl.contains('drive.google.com')) {
+      try {
+        String directUrl = videoUrl;
+        String? videoId;
+        
+        // Intentar formato /file/d/ID
+        final RegExp driveRegex = RegExp(r'/file/d/([a-zA-Z0-9_-]+)');
+        final match = driveRegex.firstMatch(videoUrl);
+        if (match != null && match.groupCount >= 1) {
+          videoId = match.group(1);
+        } else {
+          // Intentar formato ?id=ID
+          final uri = Uri.tryParse(videoUrl);
+          if (uri != null && uri.queryParameters.containsKey('id')) {
+            videoId = uri.queryParameters['id'];
+          }
+        }
+        
+        if (videoId != null) {
+          directUrl = 'https://drive.google.com/uc?export=download&id=$videoId';
+        }
+        
+        _videoController = VideoPlayerController.networkUrl(Uri.parse(directUrl));
+        await _videoController!.initialize();
+        _chewieController = ChewieController(
+          videoPlayerController: _videoController!,
+          autoPlay: false,
+          looping: false,
+          aspectRatio: _videoController!.value.aspectRatio,
+          placeholder: Container(color: Colors.black),
+          errorBuilder: (context, errorMessage) {
+            return const Center(
+              child: Text("Error al cargar video de Drive", style: TextStyle(color: Colors.white)),
+            );
+          },
+        );
+        setState(() => _isVideoInitialized = true);
+      } catch (e) {
+        print("Error video Drive: $e");
+        setState(() {
+          _isExternalLink = true;
+          _isVideoInitialized = true;
+        });
+      }
+    } else {
+      // Web externo, usaremos el navegador
+      setState(() {
+        _isExternalLink = true;
+        _isVideoInitialized = true;
+      });
     }
   }
 
@@ -138,9 +225,22 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
-                        child: _isVideoInitialized
-                            ? Chewie(controller: _chewieController!)
-                            : const Center(child: CircularProgressIndicator()),
+                        child: !_isVideoInitialized
+                            ? const Center(child: CircularProgressIndicator())
+                            : _isExternalLink
+                                ? Center(
+                                    child: ElevatedButton.icon(
+                                      onPressed: () async {
+                                        final url = Uri.parse(_currentProject.videoUrl);
+                                        if (await canLaunchUrl(url)) {
+                                          await launchUrl(url);
+                                        }
+                                      },
+                                      icon: const Icon(Icons.open_in_browser),
+                                      label: const Text("Abrir video en el navegador"),
+                                    ),
+                                  )
+                                : Chewie(controller: _chewieController!),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -226,6 +326,14 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                       ),
                     ),
 
+                    const SizedBox(height: 15),
+                    _buildSectionTitle("Metodología", isDark),
+                    Text(
+                      _currentProject.metodologia,
+                      style: TextStyle(
+                        color: isDark ? Colors.white70 : Colors.black87,
+                      ),
+                    ),
 
                     const SizedBox(height: 40),
 
