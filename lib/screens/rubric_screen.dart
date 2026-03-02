@@ -13,7 +13,7 @@ class RubricScreen extends StatefulWidget {
 class _RubricScreenState extends State<RubricScreen> {
   final TextEditingController _reviewController = TextEditingController();
 
-  void _submitReview() {
+  Future<void> _submitReview() async {
     if (_reviewController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -24,7 +24,7 @@ class _RubricScreenState extends State<RubricScreen> {
     }
 
     // Navegar directamente a la nueva pantalla de Análisis
-    Navigator.push(
+    final result = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => AiAnalysisScreen(
@@ -33,6 +33,11 @@ class _RubricScreenState extends State<RubricScreen> {
         ),
       ),
     );
+
+    // Si la evaluación fue exitosa, cerramos esta pantalla indicando éxito al detalle del proyecto
+    if (result == true && mounted) {
+      Navigator.pop(context, true);
+    }
   }
 
   @override

@@ -3,6 +3,7 @@ import '../models/project.dart';
 import '../models/evaluation.dart';
 import '../services/api_service.dart';
 import '../services/ai_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math' as math;
 
 class AiAnalysisScreen extends StatefulWidget {
@@ -59,10 +60,15 @@ class _AiAnalysisScreenState extends State<AiAnalysisScreen>
       return;
     }
 
+    // Retrieve the user ID from Shared Preferences
+    final prefs = await SharedPreferences.getInstance();
+    final String supervisorId = prefs.getString('userId') ?? "";
+
     // Preparar el envío a la API
     final evaluation = Evaluation(
       projectId: widget.project.id,
       evaluatorId: "Juez_IA", // O el ID real del usuario evaluador
+      supervisorId: supervisorId,
       innovacion: aiResult["innovacion"] ?? 0,
       funcionalidad: aiResult["funcionalidad"] ?? 0,
       disenoUx: aiResult["disenoUx"] ?? 0,
@@ -473,9 +479,8 @@ class _AiAnalysisScreenState extends State<AiAnalysisScreen>
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                // Pop back to the rubric, and pop back again to the project details
-                Navigator.pop(context);
-                Navigator.pop(context);
+                // Return true to indicate evaluation was created successfully
+                Navigator.pop(context, true);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2D8CFF),

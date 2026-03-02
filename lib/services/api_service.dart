@@ -79,6 +79,24 @@ class ApiService {
     }
   }
 
+  // 👇 NUEVO: OBTENER CONTEO DE EVALUACIONES GESTIONADAS POR SUPERVISOR
+  static Future<int> obtenerEvaluacionesGestionadas(String supervisorId) async {
+    final url = Uri.parse('$baseUrl/evaluations/supervisor/$supervisorId/count');
+    
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        return int.parse(response.body);
+      } else {
+        print('Error al obtener recuento: ${response.statusCode}');
+        return 0;
+      }
+    } catch (e) {
+      print('Excepción al conectar con la API: $e');
+      return 0;
+    }
+  }
+
   // ==========================================
   // 3. USUARIOS (Login y Registro REALES)
   // ==========================================

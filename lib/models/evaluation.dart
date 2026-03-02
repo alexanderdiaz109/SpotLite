@@ -1,6 +1,7 @@
 class Evaluation {
   final String projectId;
   final String evaluatorId;
+  final String? supervisorId;
   final int innovacion;
   final int funcionalidad;
   final int disenoUx;
@@ -11,6 +12,7 @@ class Evaluation {
   Evaluation({
     required this.projectId,
     required this.evaluatorId,
+    this.supervisorId,
     required this.innovacion,
     required this.funcionalidad,
     required this.disenoUx,
@@ -23,6 +25,7 @@ class Evaluation {
     return {
       "projectId": projectId,
       "evaluatorId": evaluatorId,
+      if (supervisorId != null) "supervisorId": supervisorId,
       "scores": {
         "innovacion": innovacion,
         "funcionalidad": funcionalidad,
@@ -38,6 +41,7 @@ class Evaluation {
     return Evaluation(
       projectId: json['projectId'] ?? '',
       evaluatorId: json['evaluatorId'] ?? '',
+      supervisorId: json['supervisorId'],
       innovacion: json['scores']?['innovacion'] ?? 0,
       funcionalidad: json['scores']?['funcionalidad'] ?? 0,
       disenoUx: json['scores']?['disenoUx'] ?? 0,

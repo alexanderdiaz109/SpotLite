@@ -17,6 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String role = "";
   bool _isLoading = true;
   bool _isDarkMode = true;
+  int _evaluationsCount = 0;
 
   @override
   void initState() {
@@ -26,11 +27,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('userId') ?? "";
+    
+    int evalsCount = 0;
+    if (userId.isNotEmpty) {
+      evalsCount = await ApiService.obtenerEvaluacionesGestionadas(userId);
+    }
+
     setState(() {
       name = prefs.getString('userName') ?? "Usuario";
       email = prefs.getString('userEmail') ?? "Sin correo";
       role = prefs.getString('userRole') ?? "Invitado";
       _isDarkMode = prefs.getBool('isDarkMode') ?? true;
+      _evaluationsCount = evalsCount;
       _isLoading = false;
     });
   }
@@ -196,18 +205,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 horizontal: 30,
                               ),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   _buildStatCard(
-                                    "Evaluaciones",
-                                    "12",
+                                    "Evaluaciones Gestionadas",
+                                    "$_evaluationsCount",
                                     Icons.assignment_turned_in,
-                                    isDark,
-                                  ),
-                                  const SizedBox(width: 15),
-                                  _buildStatCard(
-                                    "Promedio",
-                                    "9.5",
-                                    Icons.star,
                                     isDark,
                                   ),
                                 ],
