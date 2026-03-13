@@ -350,6 +350,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     _buildFilterChip("Tecnología", isDark, isCategory: true),
                     _buildFilterChip("Salud", isDark, isCategory: true),
                     _buildFilterChip("Arte", isDark, isCategory: true),
+                    _buildFilterChip("Juegos", isDark, isCategory: true),
                   ],
                 ),
               ),
@@ -437,32 +438,74 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     }
 
+                    // SEPARAR ELEMENTOS EN DOS LISTAS: JUEGOS Y PROYECTOS
+                    final listaJuegos = searchResults.where((p) => p.category.toLowerCase() == 'juegos').toList();
+                    final listaProyectos = searchResults.where((p) => p.category.toLowerCase() != 'juegos').toList();
+
                     return RefreshIndicator(
                       onRefresh: _refreshProjects,
                       color: const Color(0xFF2D8CFF),
                       backgroundColor: isDark
                           ? const Color(0xFF131B38)
                           : Colors.white,
-                      child: ListView.builder(
+                      child: ListView(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 10,
                         ),
-                        itemCount: searchResults.length,
-                        itemBuilder: (context, index) {
-                          return _ProjectPreviewCard(
-                            project: searchResults[index],
-                            isDark: isDark,
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => ProjectDetailScreen(
-                                  project: searchResults[index],
+                        children: [
+                          if (listaJuegos.isNotEmpty) ...[
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 15, top: 10),
+                              child: Text(
+                                "🎮 Juegos",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: isDark ? Colors.white : const Color(0xFF050B30),
                                 ),
                               ),
-                            ).then((_) => _refreshProjects()),
-                          );
-                        },
+                            ),
+                            ...listaJuegos.map((project) => _ProjectPreviewCard(
+                                  project: project,
+                                  isDark: isDark,
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => ProjectDetailScreen(
+                                        project: project,
+                                      ),
+                                    ),
+                                  ).then((_) => _refreshProjects()),
+                                )),
+                          ],
+                          
+                          if (listaProyectos.isNotEmpty) ...[
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 15, top: 15),
+                              child: Text(
+                                "🚀 Proyectos",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: isDark ? Colors.white : const Color(0xFF050B30),
+                                ),
+                              ),
+                            ),
+                            ...listaProyectos.map((project) => _ProjectPreviewCard(
+                                  project: project,
+                                  isDark: isDark,
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => ProjectDetailScreen(
+                                        project: project,
+                                      ),
+                                    ),
+                                  ).then((_) => _refreshProjects()),
+                                )),
+                          ],
+                        ],
                       ),
                     );
                   },
