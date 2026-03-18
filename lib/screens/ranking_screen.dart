@@ -43,7 +43,7 @@ class _RankingScreenState extends State<RankingScreen> {
           : const Color(0xFFF8FAFC),
       appBar: AppBar(
         title: Text(
-          "Ranking Global",
+          "Ranking global",
           style: TextStyle(
             color: isDark ? Colors.white : const Color(0xFF050B30),
             fontWeight: FontWeight.bold,

@@ -60,7 +60,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             DeviceOrientation.landscapeRight,
           ],
           errorBuilder: (context, errorMessage) {
-            return const Center(child: Text("Error al cargar video nativo de YT", style: TextStyle(color: Colors.white)));
+            return const Center(child: Text("Error al cargar el video nativo de YouTube", style: TextStyle(color: Colors.white)));
           },
         );
         setState(() => _isVideoInitialized = true);
@@ -97,7 +97,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
           ],
           errorBuilder: (context, errorMessage) {
             return const Center(
-              child: Text("Error al cargar video", style: TextStyle(color: Colors.white)),
+              child: Text("Error al cargar el video", style: TextStyle(color: Colors.white)),
             );
           },
         );
@@ -181,6 +181,18 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     final imageProvider = (validImageUrl.isNotEmpty)
         ? NetworkImage(validImageUrl)
         : const NetworkImage("https://picsum.photos/seed/tech/800/400");
+
+    final allTechs = _currentProject.tecnologias;
+    final platformsList = ["Web", "Móvil", "Web y Móvil", "Movil"];
+    String? platform;
+    List<String> pureTechs = [];
+
+    if (allTechs.isNotEmpty && platformsList.contains(allTechs.first)) {
+      platform = allTechs.first;
+      pureTechs = allTechs.sublist(1);
+    } else {
+      pureTechs = List.from(allTechs);
+    }
 
     return Scaffold(
       backgroundColor: isDark
@@ -312,23 +324,41 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                     ),
                     const SizedBox(height: 20),
 
-                    // TECNOLOGÍAS
-                    const Text(
-                      "TECNOLOGÍAS",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
+                    // PLATAFORMA
+                    if (platform != null) ...[
+                      const Text(
+                        "PLATAFORMA",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      children: _currentProject.tecnologias
-                          .map((tech) => _buildTechChip(tech, isDark))
-                          .toList(),
-                    ),
-                    const SizedBox(height: 20),
+                      const SizedBox(height: 8),
+                      _buildTechChip(platform, isDark),
+                      const SizedBox(height: 20),
+                    ],
+
+                    // TECNOLOGÍAS
+                    if (pureTechs.isNotEmpty) ...[
+                      const Text(
+                        "TECNOLOGÍAS",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: pureTechs
+                            .map((tech) => _buildTechChip(tech, isDark))
+                            .toList(),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
 
                     // INTEGRANTES
                     const Text(
@@ -358,7 +388,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                     const SizedBox(height: 20),
 
                     // DESCRIPCIÓN Y METODOLOGÍA
-                    _buildSectionTitle("Proyecto Abstracto", isDark),
+                    _buildSectionTitle("Resumen del proyecto", isDark),
                     Text(
                       _currentProject.description,
                       style: TextStyle(
@@ -398,7 +428,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                           color: Colors.white,
                         ),
                         label: const Text(
-                          "Calificar Proyecto",
+                          "Calificar proyecto",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -602,7 +632,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Análisis Detallado",
+                      "Análisis detallado",
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -639,19 +669,19 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
               )
             else ...[
               _buildScoreRow(
-                "Innovación y Originalidad",
+                "Innovación y originalidad",
                 avgInnovacion,
                 5,
                 isDark,
               ),
               _buildScoreRow(
-                "Funcionalidad Técnica",
+                "Funcionalidad técnica",
                 avgFuncionalidad,
                 5,
                 isDark,
               ),
               _buildScoreRow("Diseño y UX", avgDiseno, 5, isDark),
-              _buildScoreRow("Impacto Social", avgImpacto, 5, isDark),
+              _buildScoreRow("Impacto social", avgImpacto, 5, isDark),
             ],
 
             const SizedBox(height: 20),

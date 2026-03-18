@@ -62,7 +62,7 @@ class _RubricScreenState extends State<RubricScreen> {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(
-              "Rubrica",
+              "Rúbrica",
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -87,13 +87,13 @@ class _RubricScreenState extends State<RubricScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildStaticCriteria(
-                      "Innovación y Originalidad",
+                      "Innovación y originalidad",
                       "Evalúa si la idea es nueva.",
                       "20",
                       isDark,
                     ),
                     _buildStaticCriteria(
-                      "Funcionalidad Técnica",
+                      "Funcionalidad técnica",
                       "Evalúa si el proyecto realmente funciona.",
                       "40",
                       isDark,
@@ -105,7 +105,7 @@ class _RubricScreenState extends State<RubricScreen> {
                       isDark,
                     ),
                     _buildStaticCriteria(
-                      "Impacto Social",
+                      "Impacto social",
                       "Utilidad en el mundo real.",
                       "20",
                       isDark,
@@ -141,7 +141,7 @@ class _RubricScreenState extends State<RubricScreen> {
                         ),
                         decoration: InputDecoration(
                           hintText:
-                              "Describa fortalezas, debilidades y viabilidad técnica/comercial...",
+                              "Describe las fortalezas, debilidades y la viabilidad técnica o comercial...",
                           hintStyle: TextStyle(
                             color: isDark ? Colors.white54 : Colors.grey,
                             fontSize: 14,
@@ -177,7 +177,7 @@ class _RubricScreenState extends State<RubricScreen> {
                           color: Colors.white,
                         ),
                         label: const Text(
-                          "Guardar y analizarlo",
+                          "Guardar y analizar",
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

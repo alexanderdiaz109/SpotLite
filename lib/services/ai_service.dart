@@ -43,7 +43,7 @@ class AiService {
     } catch (e) {
       print('❌ Error al guardar log local: \$e');
 
-      // Fallback extremo si falla path_provider (Entorno Windows Dev)
+      // Fallback extremo si falla path_provider (entorno Windows Dev).
       try {
         File fallbackFile = File('SpotLight_AILogs.json');
         if (!await fallbackFile.exists()) {
@@ -61,7 +61,7 @@ class AiService {
           JsonEncoder.withIndent('  ').convert(logs),
         );
         print(
-          '✅ LOG GUARDADO EN LA RAIZ DEL PROYECTO: \${fallbackFile.absolute.path}',
+          '✅ LOG GUARDADO EN LA RAÍZ DEL PROYECTO: \${fallbackFile.absolute.path}',
         );
       } catch (e2) {
         print('❌ Fallo total al guardar log: \$e2');
@@ -105,7 +105,7 @@ class AiService {
       3. "puntuacionFactibilidad" DEBE ser un entero del 0 al 100 evaluando la viabilidad comercial y técnica. OBLIGATORIO.
       4. "fortalezas" debe ser un arreglo de máximo 3 strings cortos.
       5. "nivelRiesgo" debe ser estrictamente "Alto", "Medio" o "Bajo".
-      6. RESPETA ESTRICTAMENTE EL FORMATO JSON MOSTRADO. Invéntate valores neutrales o genéricos si la reseña del usuario carece de información útil.
+      6. RESPETA ESTRICTAMENTE EL FORMATO JSON MOSTRADO. Inventa valores neutrales o genéricos si la reseña del usuario carece de información útil.
       ''';
 
       final content = [Content.text(prompt)];

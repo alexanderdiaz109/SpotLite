@@ -136,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           _buildGlassTextField(
                             _emailController,
-                            "Correo Institucional",
+                            "Correo institucional",
                             false,
                           ),
                           const SizedBox(height: 25),

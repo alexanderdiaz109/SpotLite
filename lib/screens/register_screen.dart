@@ -71,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
-              "Error al registrar (El correo ya existe o falló la red)",
+              "Error al registrar (el correo ya existe o falló la red)",
             ),
             backgroundColor: Colors.red,
           ),
@@ -134,7 +134,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Text(
-                            "Crear Cuenta",
+                            "Crear cuenta",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 26,
@@ -155,13 +155,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           // INPUTS ESTILO GLASS (Aquí el texto blanco sí se verá)
                           _buildGlassTextField(
                             _nameController,
-                            "Nombre Completo",
+                            "Nombre completo",
                             Icons.person_outline,
                           ),
                           const SizedBox(height: 15),
                           _buildGlassTextField(
                             _emailController,
-                            "Correo Institucional",
+                            "Correo institucional",
                             Icons.email_outlined,
                           ),
                           const SizedBox(height: 15),
@@ -175,7 +175,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           const SizedBox(height: 15),
                           _buildGlassTextField(
                             _confirmPassController,
-                            "Confirmar Contraseña",
+                            "Confirmar contraseña",
                             Icons.lock_outline,
                             isPasswordField: true,
                             isObscured: !_isConfirmPassVisible,
@@ -183,7 +183,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           const SizedBox(height: 15),
                           _buildGlassTextField(
                             _specialtyController,
-                            "Especialidad / Carrera",
+                            "Especialidad / carrera",
                             Icons.school_outlined,
                           ),
 

@@ -9,7 +9,7 @@ class ProjectSkeleton extends StatelessWidget {
     // Usamos colores oscuros para que combine con tu tema "Space"
     return Shimmer.fromColors(
       baseColor: const Color(0xFF131B38), // Color de la tarjeta apagada
-      highlightColor: const Color(0xFF1F2C5C), // Color del brillo pasando
+      highlightColor: const Color(0xFF1F2C5C), // Color del brillo al pasar
       child: Container(
         margin: const EdgeInsets.only(bottom: 25),
         decoration: BoxDecoration(

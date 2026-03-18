@@ -165,7 +165,7 @@ class _AiAnalysisScreenState extends State<AiAnalysisScreen>
           ),
           const SizedBox(height: 40),
           Text(
-            "Analizando reseña...",
+            "Analizando la reseña...",
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,

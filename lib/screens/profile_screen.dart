@@ -102,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Expanded(
                       child: Text(
-                        "Mi Perfil",
+                        "Mi perfil",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: isDark ? Colors.white : Colors.black87,
@@ -208,7 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   _buildStatCard(
-                                    "Evaluaciones Gestionadas",
+                                    "Evaluaciones gestionadas",
                                     "$_evaluationsCount",
                                     Icons.assignment_turned_in,
                                     isDark,
@@ -251,7 +251,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: Colors.white,
                                 ),
                                 label: const Text(
-                                  "Cerrar Sesión",
+                                  "Cerrar sesión",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -340,7 +340,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             contentPadding: EdgeInsets.zero,
             activeColor: const Color(0xFF2D8CFF),
             title: Text(
-              "Modo Oscuro",
+              "Modo oscuro",
               style: TextStyle(
                 color: isDark ? Colors.white70 : Colors.black87,
                 fontSize: 16,
