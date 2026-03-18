@@ -714,6 +714,16 @@ class _ProjectPreviewCardState extends State<_ProjectPreviewCard> {
         ? NetworkImage(validImageUrl)
         : const NetworkImage("https://picsum.photos/seed/tech/800/400");
 
+    final allTechs = widget.project.tecnologias;
+    final platformsList = ["Web", "Móvil", "Web y Móvil", "Movil"];
+    List<String> pureTechs = [];
+
+    if (allTechs.isNotEmpty && platformsList.contains(allTechs.first)) {
+      pureTechs = allTechs.sublist(1);
+    } else {
+      pureTechs = List.from(allTechs);
+    }
+
     return VisibilityDetector(
       key: Key('project-vis-${widget.project.id}'),
       onVisibilityChanged: _onVisibilityChanged,
@@ -868,7 +878,7 @@ class _ProjectPreviewCardState extends State<_ProjectPreviewCard> {
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
-                      children: widget.project.tecnologias
+                      children: pureTechs
                           .map(
                             (t) => Container(
                               padding: const EdgeInsets.symmetric(
