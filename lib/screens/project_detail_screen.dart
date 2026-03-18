@@ -40,7 +40,15 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     if (videoUrl.contains('youtube.com') || videoUrl.contains('youtu.be')) {
       try {
         final yt = YoutubeExplode();
-        final manifest = await yt.videos.streamsClient.getManifest(videoUrl);
+        String processedUrl = videoUrl;
+        if (processedUrl.contains('/shorts/')) {
+          final RegExp shortRegex = RegExp(r'/shorts/([a-zA-Z0-9_-]+)');
+          final match = shortRegex.firstMatch(processedUrl);
+          if (match != null) {
+            processedUrl = 'https://www.youtube.com/watch?v=${match.group(1)}';
+          }
+        }
+        final manifest = await yt.videos.streamsClient.getManifest(processedUrl);
         final streamInfo = manifest.muxed.withHighestBitrate();
         
         _videoController = VideoPlayerController.networkUrl(streamInfo.url);

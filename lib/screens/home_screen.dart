@@ -318,23 +318,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              // 1. FILTRO DE PLATAFORMA (Existente)
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 5,
-                ),
-                child: Row(
-                  children: [
-                    _buildFilterChip("Todos", isDark, isCategory: false),
-                    _buildFilterChip("Móvil", isDark, isCategory: false),
-                    _buildFilterChip("Web", isDark, isCategory: false),
-                    _buildFilterChip("Web y móvil", isDark, isCategory: false),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
 
               // 2. FILTRO DE CATEGORÍA (Nuevo)
               SingleChildScrollView(
@@ -389,32 +372,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     final projects = snapshot.data!;
                     
-                    // Doble filtrado: Plataforma AND Categoría
+                    // Filtrado de Categoría
                     final filteredProjects = projects.where((p) {
-                      // 1. Filtrado de Plataforma
-                      bool pasaPlataforma = false;
-                      if (_selectedFilter == "Todos") {
-                        pasaPlataforma = true;
-                      } else {
-                        final techs = p.tecnologias.map((t) => t.toLowerCase()).toList();
-                        bool esMovil = techs.any((t) => t.contains("móvil") || t.contains("movil") || t.contains("mobile"));
-                        bool esWeb = techs.any((t) => t.contains("web"));
-                        bool esHibrido = techs.contains("web y móvil") || (esMovil && esWeb);
-
-                        if (_selectedFilter == "Móvil") pasaPlataforma = esMovil && !esWeb && !techs.contains("web y móvil");
-                        else if (_selectedFilter == "Web") pasaPlataforma = esWeb && !esMovil && !techs.contains("web y móvil");
-                        else if (_selectedFilter == "Web y móvil") pasaPlataforma = esHibrido;
-                      }
-
-                      // 2. Filtrado de Categoría
-                      bool pasaCategoria = false;
                       if (_selectedCategory == "Todas") {
-                        pasaCategoria = true;
-                      } else {
-                        pasaCategoria = p.category.toLowerCase() == _selectedCategory.toLowerCase();
+                        return true;
                       }
-
-                      return pasaPlataforma && pasaCategoria;
+                      return p.category.toLowerCase() == _selectedCategory.toLowerCase();
                     }).toList();
 
                     final searchResults = filteredProjects.where((p) {
@@ -616,7 +579,15 @@ class _ProjectPreviewCardState extends State<_ProjectPreviewCard> {
     try {
       if (videoUrl.contains('youtube.com') || videoUrl.contains('youtu.be')) {
         final yt = YoutubeExplode();
-        final manifest = await yt.videos.streamsClient.getManifest(videoUrl);
+        String processedUrl = videoUrl;
+        if (processedUrl.contains('/shorts/')) {
+          final RegExp shortRegex = RegExp(r'/shorts/([a-zA-Z0-9_-]+)');
+          final match = shortRegex.firstMatch(processedUrl);
+          if (match != null) {
+            processedUrl = 'https://www.youtube.com/watch?v=${match.group(1)}';
+          }
+        }
+        final manifest = await yt.videos.streamsClient.getManifest(processedUrl);
         final streamInfo = manifest.muxed.withHighestBitrate();
         _videoController = VideoPlayerController.networkUrl(streamInfo.url);
         await _videoController!.initialize();
@@ -717,11 +688,18 @@ class _ProjectPreviewCardState extends State<_ProjectPreviewCard> {
     final allTechs = widget.project.tecnologias;
     final platformsList = ["Web", "Móvil", "Web y Móvil", "Movil"];
     List<String> pureTechs = [];
+    String displayPlatform = "Desconocido";
 
     if (allTechs.isNotEmpty && platformsList.contains(allTechs.first)) {
+      displayPlatform = allTechs.first;
       pureTechs = allTechs.sublist(1);
     } else {
       pureTechs = List.from(allTechs);
+      if (allTechs.any((t) => t.toLowerCase().contains('móvil') || t.toLowerCase().contains('movil'))) {
+        displayPlatform = "Móvil";
+      } else {
+        displayPlatform = "Web";
+      }
     }
 
     return VisibilityDetector(
@@ -857,19 +835,31 @@ class _ProjectPreviewCardState extends State<_ProjectPreviewCard> {
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
                             color: const Color(0xFF2D8CFF).withOpacity(0.1),
-                            shape: BoxShape.circle,
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Icon(
-                            widget.project.tecnologias.any(
-                                  (t) => t.toLowerCase().contains('móvil'),
-                                )
-                                ? Icons.phone_android
-                                : Icons.web,
-                            color: const Color(0xFF2D8CFF),
-                            size: 20,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                displayPlatform.toLowerCase().contains('móvil') || displayPlatform.toLowerCase().contains('movil')
+                                    ? Icons.phone_android
+                                    : Icons.web,
+                                color: const Color(0xFF2D8CFF),
+                                size: 16,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                displayPlatform,
+                                style: const TextStyle(
+                                  color: Color(0xFF2D8CFF),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
