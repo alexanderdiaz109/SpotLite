@@ -309,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
                 child: Text(
-                  "Explora Proyectos",
+                  "Explora proyectos",
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -330,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     _buildFilterChip("Todos", isDark, isCategory: false),
                     _buildFilterChip("Móvil", isDark, isCategory: false),
                     _buildFilterChip("Web", isDark, isCategory: false),
-                    _buildFilterChip("Web y Móvil", isDark, isCategory: false),
+                    _buildFilterChip("Web y móvil", isDark, isCategory: false),
                   ],
                 ),
               ),
@@ -346,10 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   children: [
                     _buildFilterChip("Todas", isDark, isCategory: true),
-                    _buildFilterChip("Sustentabilidad", isDark, isCategory: true),
-                    _buildFilterChip("Tecnología", isDark, isCategory: true),
-                    _buildFilterChip("Salud", isDark, isCategory: true),
-                    _buildFilterChip("Arte", isDark, isCategory: true),
+                    _buildFilterChip("Proyectos", isDark, isCategory: true),
                     _buildFilterChip("Juegos", isDark, isCategory: true),
                   ],
                 ),
@@ -406,7 +403,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         if (_selectedFilter == "Móvil") pasaPlataforma = esMovil && !esWeb && !techs.contains("web y móvil");
                         else if (_selectedFilter == "Web") pasaPlataforma = esWeb && !esMovil && !techs.contains("web y móvil");
-                        else if (_selectedFilter == "Web y Móvil") pasaPlataforma = esHibrido;
+                        else if (_selectedFilter == "Web y móvil") pasaPlataforma = esHibrido;
                       }
 
                       // 2. Filtrado de Categoría
@@ -938,7 +935,7 @@ class _ProjectPreviewCardState extends State<_ProjectPreviewCard> {
                         ],
                       ),
                       child: Text(
-                        "Visualizar Proyecto",
+                        "Visualizar proyecto",
                         style: TextStyle(
                           color: widget.isDark ? Colors.white : const Color(0xFF2D8CFF),
                           fontWeight: FontWeight.bold,
